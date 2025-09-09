@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiFi Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h2>WiFi Password Simulator</h2>
+  <p>Masukkan nama WiFi (SSID):</p>
+  <input type="text" id="wifiName" placeholder="contoh: fh12cae8">
+  <button onclick="generatePassword()">Generate</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    const mapping = {
+      "0": "f", "1": "e", "2": "d", "3": "c", "4": "b", "5": "a",
+      "6": "9", "7": "8", "8": "7", "a": "5", "c": "3", "e": "1"
+    };
+
+    function generatePassword() {
+      const wifi = document.getElementById("wifiName").value.toLowerCase();
+      let resultDiv = document.getElementById("result");
+
+      if (wifi.startsWith("fh") && wifi.length >= 7) {
+        let core = wifi.slice(2); // ambil setelah "fh"
+        let transformed = "";
+
+        for (let ch of core) {
+          transformed += mapping[ch] || ch;
+        }
+
+        let password = "wlan" + transformed;
+        resultDiv.textContent = "Password: " + password;
+      } else {
+        resultDiv.textContent = "SSID tidak sesuai pola.";
+        resultDiv.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
