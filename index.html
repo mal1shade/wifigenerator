@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WiFi Simulator</title>
+  <title>WiFi fh generator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,16 +21,54 @@
       font-size: 18px;
       color: green;
     }
+
+    /* Overlay */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      z-index: 1000;
+    }
+    #overlay input {
+      font-size: 18px;
+      padding: 8px;
+      margin: 10px;
+    }
+    #overlay button {
+      font-size: 16px;
+      padding: 8px 15px;
+      cursor: pointer;
+    }
+    #error {
+      margin-top: 10px;
+      color: red;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <!-- Overlay password -->
+  <div id="overlay">
+    <h2>Masukkan Kata Sandi</h2>
+    <input type="password" id="sitePassword" placeholder="Password">
+    <button onclick="checkPassword()">Masuk</button>
+    <div id="error"></div>
+  </div>
+
   <h2>WiFi Password Simulator</h2>
-  <p>Masukkan nama WiFi (SSID):</p>
+  <p>Masukkan nama WiFi Fh (SSID):</p>
   <input type="text" id="wifiName" placeholder="contoh: fh12cae8">
   <button onclick="generatePassword()">Generate</button>
   <div class="result" id="result"></div>
 
   <script>
+    // mapping untuk simulator
     const mapping = {
       "0": "f", "1": "e", "2": "d", "3": "c", "4": "b", "5": "a",
       "6": "9", "7": "8", "8": "7", "a": "5", "c": "3", "e": "1"
@@ -40,8 +78,8 @@
       const wifi = document.getElementById("wifiName").value.toLowerCase();
       let resultDiv = document.getElementById("result");
 
-      if (wifi.startsWith("fh") && wifi.length >= 7) {
-        let core = wifi.slice(2); // ambil setelah "fh"
+      if (wifi.startsWith("fh") && wifi.length >= 6) {
+        let core = wifi.slice(2);
         let transformed = "";
 
         for (let ch of core) {
@@ -50,9 +88,24 @@
 
         let password = "wlan" + transformed;
         resultDiv.textContent = "Password: " + password;
+        resultDiv.style.color = "green";
       } else {
         resultDiv.textContent = "SSID tidak sesuai pola.";
         resultDiv.style.color = "red";
+      }
+    }
+
+    // Overlay password
+    const correctPassword = "fhonly"; // <-- Ganti password di sini
+
+    function checkPassword() {
+      const input = document.getElementById("sitePassword").value;
+      const errorDiv = document.getElementById("error");
+
+      if (input === correctPassword) {
+        document.getElementById("overlay").style.display = "none";
+      } else {
+        errorDiv.textContent = "Password salah!";
       }
     }
   </script>
